@@ -1,4 +1,4 @@
-#!/usr/bin/env python -tt
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- mode: python -*-
 
@@ -141,17 +141,20 @@ def uploadToGoogle(ics, email, password, calendar="default", reminder=30, \
         if getattr(ics.vevent, "rrule", None):
                 try:
                         event.recurrence = Recurrence(text=("%s\r\n%s\r\n%s\r\n") % (
-                                "DTSTART;VALUE=DATE:%s" % (
-                                        time.strftime("%Y%m%d",ics.vevent.dtstart.value.utctimetuple())
+                                "DTSTART:%s" % (
+                                        time.strftime("%Y%m%dT%H%M%SZ",ics.vevent.dtstart.value.utctimetuple())
                                         ),
-                                "DTEND;VALUE=DATE:%s" % (
-                                        time.strftime("%Y%m%d",ics.vevent.dtend.value.utctimetuple())
+                                "DTEND:%s" % (
+                                        time.strftime("%Y%m%dT%H%M%SZ",ics.vevent.dtend.value.utctimetuple())
                                         ),
                                 "RRULE:%s" % (
                                         ics.vevent.rrule.value
                                         )
                                 )
                         )
+                        # can't have recurrence and when so clean when out.
+                        del event.when[:]
+
                 except Exception, e:
                         print "could not add Recurrence to event, %s" % (str(e))
                         return None
