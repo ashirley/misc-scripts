@@ -8,7 +8,12 @@ function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
 }
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\][\t]: \[\033[01;34m\]\w\[\033[00m\] \[\033[01;33m\]$(parse_git_branch)\[\033[00m\] \$ '
+CYAN="\[\033[01;36m\]"
+YELLOW="\[\033[01;33m\]"
+GREEN="\[\033[01;32m\]"
+CLEAR="\[\033[00m\]"
+
+PS1='${debian_chroot:+($debian_chroot)}'"${GREEN}\u@\h${CLEAR}[\t]: ${CYAN}\w${CLEAR} ${YELLOW}"'$(parse_git_branch)'"${CLEAR} \$ "
 
 if [ $# -gt 0 ]
 then
